@@ -1,7 +1,8 @@
 <?php
 session_start();
-include "connection/conn.php";
-require_once "Auth/AuthFactory.php";
+require_once "connection/conn.php";
+require_once "Pattern/AuthFactory.php";
+require_once "Pattern/ObserverPattern.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['masuk']) ? 'masuk' : (isset($_POST['daftar']) ? 'daftar' : null);
@@ -9,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action !== null) {
         try {
             $handler = AuthFactory::create($action);
+            $observer = new SessionAlertObserver();
+            $handler->attach($observer);
             $handler->handle($_POST);
         } catch (Exception $e) {
             $_SESSION['alert_class'] = "alert-danger";
@@ -19,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 
 <!DOCTYPE html>

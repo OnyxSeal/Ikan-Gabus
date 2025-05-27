@@ -1,7 +1,8 @@
 <?php
 
-include "connection/conn.php";
+session_start();
 
+include "connection/conn.php";
 include "Pattern/AuthFactory.php";
 include "Pattern/ObserverPattern.php";
 
