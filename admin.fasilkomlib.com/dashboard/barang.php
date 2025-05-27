@@ -9,7 +9,7 @@ include "../connection/conn.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']); // Sanitasi input
 
-    // Query untuk mendapatkan data gambar
+    // Query untuk mendapatkan data gambarr
     $query_gambar = "SELECT cover FROM books WHERE bookID = ?";
     $stmt_gambar = $db->prepare($query_gambar);
     $stmt_gambar->bind_param("i", $delete_id);

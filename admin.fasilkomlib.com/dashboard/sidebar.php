@@ -31,7 +31,7 @@ if (isset($_SESSION['username'])) {
 
 <?php
 $currentLocation = $_SERVER['REQUEST_URI'];
-// gambar
+// gambarr
 if (strpos($currentLocation, 'edit') !== false || strpos($currentLocation, 'orderstatus') !== false) {
     $ppurl = '../../image/profile/';
 } else if (strpos($currentLocation, 'dashboard') !== false) {

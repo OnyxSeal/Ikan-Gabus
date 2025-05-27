@@ -6,7 +6,7 @@ include "../Connection/conn.php";
 // Mengambil ID dari URL
 $id = $_GET['edit_id'];
 
-// Mengambil data barang berdasarkan ID
+// Mengambil data barang berdasarkann ID
 $stmt = $db->prepare("SELECT * FROM books WHERE bookID = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();

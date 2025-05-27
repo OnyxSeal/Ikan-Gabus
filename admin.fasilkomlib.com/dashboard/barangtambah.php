@@ -44,7 +44,7 @@ if (isset($_POST["submit"])) {
     $pdfExt = strtolower(pathinfo($pdfName, PATHINFO_EXTENSION));
     if ($pdfExt !== 'pdf') {
       echo "<script>alert('Invalid PDF Extension');</script>";
-    } else if ($pdfSize > 5000000) { // batas ukuran 5MB
+    } else if ($pdfSize > 5000000) { // batas ukuran 5MB.
       echo "<script>alert('PDF size is too large');</script>";
     } else {
       $cleanTitle = str_replace(' ', '-', $title);
