@@ -1,6 +1,6 @@
 <?php 
  
-$db = mysqli_connect("localhost","root","","gigavalboook");
+$db = mysqli_connect("localhost","root","","tokobuku");
  
 // Check connection
 if (mysqli_connect_errno()){

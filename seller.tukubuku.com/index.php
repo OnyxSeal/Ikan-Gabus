@@ -53,7 +53,11 @@ if (isset($_POST['daftar'])) {
     if (mysqli_num_rows($check_user_result) > 0) {
         $_SESSION['alert_class'] = "alert-danger";
         $_SESSION['alert_message'] = "Email tersebut sudah digunakan. Silakan coba dengan email lain.";
-    } else {
+    } else  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@.*unsika\.ac\.id$/', $email)) {
+        // $error = "Please enter a valid email with unsika.ac.id domain.";
+        $_SESSION['alert_class'] = "alert-danger";
+        $_SESSION['alert_message'] = "Pastikan Anda memasukan Email Univeristas Singaperbangsa Karawang";
+    } else  {
         $insert_user_query = "INSERT INTO admin (profile_picture, fullname, email, usradm, pwadm, nohpadm) VALUES ('$avatar', '$fullname', '$email', '$username', '$password', '$nohp')";
         mysqli_query($db, $insert_user_query);
         $_SESSION['alert_class'] = "alert-success";

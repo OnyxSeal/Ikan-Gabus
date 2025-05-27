@@ -68,6 +68,10 @@ if (isset($_POST['daftar'])) {
         // Tampilkan pesan kesalahan
         $_SESSION['alert_class'] = "alert-danger";
         $_SESSION['alert_message'] = "Email tersebut sudah digunakan. Silakan coba dengan email lain.";
+    } else  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@.*unsika\.ac\.id$/', $email)) {
+        // $error = "Please enter a valid email with unsika.ac.id domain.";
+        $_SESSION['alert_class'] = "alert-danger";
+        $_SESSION['alert_message'] = "Pastikan Anda memasukan Email Univeristas Singaperbangsa Karawang";
     } else {
         // Jika username dan email belum ada dalam database, tambahkan data pengguna baru
         $insert_user_query = "INSERT INTO user (avatar, fullname, email, username, password, phone, socmed, address) VALUES ('$avatar', '$fullname', '$email', '$username', '$password', '$nohp', '$socmed', '$alamat')";
