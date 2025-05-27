@@ -1,87 +1,34 @@
 <?php
-// Mulai sesi
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
-// Cek apakah sesi username sudah ada
+include "connection/conn.php";
+include "Auth/AuthFactory.php";
+
 if (isset($_SESSION['username'])) {
-    // Redirect pengguna ke halaman lain atau lakukan tindakan lain jika sesi sudah aktif
     header('Location: index.php');
     exit;
 }
 
-// Include file koneksi ke database
-include "connection/conn.php";
-
+// Proses login
 if (isset($_POST['masuk'])) {
-    $user = $_POST['usem']; // Ambil input username atau email
-    $pw = $_POST['password'];
-
-    // Query untuk memeriksa apakah username atau email dan password cocok
-    $sql = "SELECT * FROM user WHERE (username='$user' OR email='$user') AND password='$pw'";
-    $result = mysqli_query($db, $sql);
-
-    // Memeriksa jumlah baris yang dikembalikan oleh query
-    if (mysqli_num_rows($result) == 1) {
-        // Jika username atau email dan password cocok, set session username
-        $_SESSION['username'] = $user;
-
-        // Set notifikasi login berhasil
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Login berhasil";
-
-        // Redirect ke halaman dashboard setelah beberapa detik
-        echo "<script>setTimeout(function(){ window.location.href = 'index.php'; }, 2000);</script>";
-    } else {
-        // Jika username atau email atau password tidak cocok, set notifikasi kesalahan
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Username atau email atau password salah. Silakan coba lagi.";
-
-        // Redirect kembali ke halaman login
-        header("Location: sign.php");
-        exit();
-    }
+    $userAction = UserFactory::create('login', $db, [
+        'usernameOrEmail' => $_POST['usem'],
+        'password' => $_POST['password']
+    ]);
+    $userAction->execute();
 }
-?>
 
-<?php
-include "connection/conn.php";
-
+// Proses register
 if (isset($_POST['daftar'])) {
-    // Ambil data dari form pendaftaran
-    $avatar = 'default_profile.png';
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $nohp = $_POST['nohp'];
-    $socmed = ' ';
-    $alamat = $_POST['alamat'];
-
-    // Query untuk memeriksa apakah username atau email sudah ada dalam database
-    $check_user_query = "SELECT * FROM user WHERE username='$username' OR email='$email'";
-    $check_user_result = mysqli_query($db, $check_user_query);
-
-    // Jika username atau email sudah ada dalam database
-    if (mysqli_num_rows($check_user_result) > 0) {
-        // Tampilkan pesan kesalahan
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Email tersebut sudah digunakan. Silakan coba dengan email lain.";
-    } else  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@.*unsika\.ac\.id$/', $email)) {
-        // $error = "Please enter a valid email with unsika.ac.id domain.";
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Pastikan Anda memasukan Email Univeristas Singaperbangsa Karawang";
-    } else {
-        // Jika username dan email belum ada dalam database, tambahkan data pengguna baru
-        $insert_user_query = "INSERT INTO user (avatar, fullname, email, username, password, phone, socmed, address) VALUES ('$avatar', '$fullname', '$email', '$username', '$password', '$nohp', '$socmed', '$alamat')";
-        mysqli_query($db, $insert_user_query);
-        // Set notifikasi pendaftaran berhasil
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Pendaftaran berhasil. Silakan login dengan akun baru kamu.";
-
-        echo "<script>setTimeout(function(){ window.location.href = 'sign.php'; }, 2000);</script>";
-    }
+    $userAction = UserFactory::create('register', $db, [
+        'fullname' => $_POST['fullname'],
+        'email' => $_POST['email'],
+        'username' => $_POST['username'],
+        'password' => $_POST['password'],
+        'nohp' => $_POST['nohp'],
+        'alamat' => $_POST['alamat']
+    ]);
+    $userAction->execute();
 }
 ?>
 
