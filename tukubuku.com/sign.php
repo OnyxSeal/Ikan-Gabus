@@ -1,8 +1,9 @@
 <?php
-session_start();
 
 include "connection/conn.php";
-include "Auth/AuthFactory.php";
+
+include "Pattern/AuthFactory.php";
+include "Pattern/ObserverPattern.php";
 
 if (isset($_SESSION['username'])) {
     header('Location: index.php');
@@ -11,16 +12,18 @@ if (isset($_SESSION['username'])) {
 
 // Proses login
 if (isset($_POST['masuk'])) {
-    $userAction = UserFactory::create('login', $db, [
+    $loginUser = UserFactory::create('login', $db, [
         'usernameOrEmail' => $_POST['usem'],
         'password' => $_POST['password']
     ]);
-    $userAction->execute();
+    $observer = new SessionAlertObserver();
+    $loginUser->attach($observer);
+    $loginUser->execute();
 }
 
 // Proses register
 if (isset($_POST['daftar'])) {
-    $userAction = UserFactory::create('register', $db, [
+    $registerUser = UserFactory::create('register', $db, [
         'fullname' => $_POST['fullname'],
         'email' => $_POST['email'],
         'username' => $_POST['username'],
@@ -28,7 +31,9 @@ if (isset($_POST['daftar'])) {
         'nohp' => $_POST['nohp'],
         'alamat' => $_POST['alamat']
     ]);
-    $userAction->execute();
+    $observer = new SessionAlertObserver();
+    $registerUser->attach($observer);
+    $registerUser->execute();
 }
 ?>
 
