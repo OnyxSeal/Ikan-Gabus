@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Sertakan file koneksi
-include "../connection/conn.php";
+include_once "../connection/conn.php";
 
 // Proses Hapus Produk
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
@@ -418,8 +418,8 @@ $offset = 0;
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($row['pdf_file']) { ?>
-                                    <a href="listpdf/<?= $row['pdf_file'] ?>" target="_blank">
+                                <?php if ($row['pdfbook']) { ?>
+                                    <a href="listpdf/<?= $row['pdfbook'] ?>" target="_blank">
                                         Lihat PDF
                                     </a>
                                 <?php } else { ?>

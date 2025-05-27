@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include "../Connection/conn.php";
+include_once "../Connection/conn.php";
 
 // Mengambil ID dari URL
 $id = $_GET['edit_id'];
@@ -55,9 +55,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cover = $row['cover'];
   }
 
+  // Periksa apakah ada file PDF yang diunggah
+  if ($_FILES['pdfbook']['name']) {
+    $target_dir_pdf = "listpdf/";
+    
+    $pdfExtension = strtolower(pathinfo($_FILES['pdfbook']['name'], PATHINFO_EXTENSION));
+    
+    // Periksa ekstensi PDF
+    if ($pdfExtension !== 'pdf') {
+      echo "Format file PDF tidak valid. Harap unggah file dengan format PDF.";
+      exit;
+    }
+    
+    $newPdfName = "[" . $title . " Edited] " . date("Y.m.d") . " - " . date("h.i.sa") . ".pdf";
+    
+    $target_file_pdf = $target_dir_pdf . $newPdfName;
+    
+    move_uploaded_file($_FILES["pdfbook"]["tmp_name"], $target_file_pdf);
+    
+    $pdfbook = $newPdfName;
+  } else {
+    $pdfbook = $row['pdfbook'];
+  }
+
+
   // Perbarui data barang di database
-  $stmt = $db->prepare("UPDATE books SET title = ?, author = ?, sinopsis = ?, isbn = ?, genre = ?, numberofpage = ?, language = ?, cover = ? WHERE bookID = ?");
-  $stmt->bind_param("sssssisss", $title, $author, $sinopsis, $isbn, $genre, $numberofpage, $language, $cover, $id);
+  $stmt = $db->prepare("UPDATE books SET title = ?, author = ?, sinopsis = ?, isbn = ?, genre = ?, numberofpage = ?, language = ?, cover = ?, pdfbook = ? WHERE bookID = ?");
+  $stmt->bind_param("sssssssssi", $title, $author, $sinopsis, $isbn, $genre, $numberofpage, $language, $cover, $pdfbook, $id);
+
 
   if ($stmt->execute()) {
     echo "<script>alert('Berhasil diubah'); document.location.href = 'barang.php';</script>";
@@ -287,7 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
   <div class="nasiLemak">
-    <!-- buku terakhir yang ditambahkan ini teh abangku -->
+    <!-- buku yang mau diedit ini teh abangku -->
     <div class="nasiTangkar">
       <div class="titleDBar">
         <span id="titleTB">Buku yang akan diubah</span>
@@ -323,6 +348,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="nop mb-3">
           <label for="title">Bahasa: </label>
           <?php echo $row['language']; ?>
+        </div>
+        <div class="nop mb-3">
+          <label for="title">File PDF: </label>
+          <a href="listpdf/<?= $row['pdfbook'] ?>" target="_blank">
+              <?= $row['pdfbook'] ?>
+          </a>
         </div>
       </div>
 
@@ -372,6 +403,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="cover">
           <input type="file" name="cover" accept=".jpg, .jpeg, .png">
         </div> <br>
+
+        <label for="pdfbook">File PDF : </label>
+        <input type="file" name="pdfbook" accept=".pdf"> <br>
+
 
         <div class="editBut">
           <div class="subJud">

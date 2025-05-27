@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Koneksi ke database
-include "../connection/conn.php";
+include_once "../connection/conn.php";
 
 $username = "";
 $fullname = "[Nama Pengguna]";

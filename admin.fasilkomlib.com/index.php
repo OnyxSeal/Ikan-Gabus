@@ -1,68 +1,27 @@
 <?php
 session_start();
+require_once "connection/conn.php";
+require_once "Pattern/AuthFactory.php";
+require_once "Pattern/ObserverPattern.php";
 
-// if ($_SERVER['REQUEST_URI'] === '/seller-ratifad.com/index.php') {
-//     header('Location: /seller-ratifad.com/', true, 302);
-//     exit;
-// }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = isset($_POST['masuk']) ? 'masuk' : (isset($_POST['daftar']) ? 'daftar' : null);
 
-include "connection/conn.php";
-
-if (isset($_POST['masuk'])) {
-    $user = $_POST['usem'];
-    $pw = $_POST['password'];
-
-    $sql = "SELECT * FROM admin WHERE (usradm='$user' OR email='$user') AND pwadm='$pw'";
-    $result = mysqli_query($db, $sql);
-
-    if (mysqli_num_rows($result) == 1) {
-
-        $_SESSION['username'] = $user;
-
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Login berhasil";
-
-        echo "<script>setTimeout(function(){ window.location.href = 'dashboard/dashboards.php'; }, 2000);</script>";
-    } else {
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Username atau email atau kata sandi salah. Silakan coba lagi.";
-
-        // Redirect kembali ke halaman login
-        header("Location: index.php");
-        exit();
+    if ($action !== null) {
+        try {
+            $handler = AuthFactory::create($action);
+            $observer = new SessionAlertObserver();
+            $handler->attach($observer);
+            $handler->handle($_POST);
+        } catch (Exception $e) {
+            $_SESSION['alert_class'] = "alert-danger";
+            $_SESSION['alert_message'] = "Terjadi kesalahan: " . $e->getMessage();
+            header("Location: index.php");
+            exit();
+        }
     }
 }
 ?>
-
-<?php
-
-include "connection/conn.php";
-
-if (isset($_POST['daftar'])) {
-    // Ambil data dari form pendaftaran
-    $avatar = $_POST['avatar'];
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $nohp = $_POST['nohp'];
-
-    $check_user_query = "SELECT * FROM admin WHERE usradm='$username' OR email='$email'";
-    $check_user_result = mysqli_query($db, $check_user_query);
-
-    if (mysqli_num_rows($check_user_result) > 0) {
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Email tersebut sudah digunakan. Silakan coba dengan email lain.";
-    } else {
-        $insert_user_query = "INSERT INTO admin (profile_picture, fullname, email, usradm, pwadm, nohpadm) VALUES ('$avatar', '$fullname', '$email', '$username', '$password', '$nohp')";
-        mysqli_query($db, $insert_user_query);
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Pendaftaran berhasil. Silakan login dengan akun baru kamu.";
-        echo "<script>setTimeout(function(){ window.location.href = 'index.php'; }, 2000);</script>";
-    }
-}
-?>
-
 
 
 <!DOCTYPE html>
@@ -79,7 +38,7 @@ if (isset($_POST['daftar'])) {
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="icon" href="https://www.gigaval.com/favicon.ico">
-    <title>Tuku Buku</title>
+    <title>FasilkomLib</title>
 </head>
 
 <style>
@@ -638,7 +597,7 @@ if (isset($_POST['daftar'])) {
         <div class="signin-signup">
             <form action="index.php" class="sign-in-form" method="post">
                 <div class="logo">
-                    <i class="fa-solid fa-book-open-reader"></i> Tuku Buku
+                    <i class="fa-solid fa-book-open-reader"></i> FasilkomLib
                 </div>
                 <h2 class="title">Login</h2>
                 <div class="input-field">
@@ -696,7 +655,7 @@ if (isset($_POST['daftar'])) {
             <div class="panel right-panel">
                 <div class="content">
                     <div class="leftLogo">
-                        <i class="fa-solid fa-book-open-reader"></i> Tuku Buku
+                        <i class="fa-solid fa-book-open-reader"></i> FasilkomLib
                     </div>
                     <h3>Belum punya akun?</h3>
                     <p>Yuk, langsung daftar. Bikinnya ga pake lama, satset langsung jadi</p>

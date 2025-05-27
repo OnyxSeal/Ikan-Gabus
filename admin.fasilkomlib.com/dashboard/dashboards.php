@@ -11,7 +11,7 @@ if (strpos($currentLocation, 'edit') !== false || strpos($currentLocation, 'orde
 
 
 <?php
-include "../connection/conn.php";
+include_once "../connection/conn.php";
 
 $queryProdukTerbaru = "SELECT title, cover FROM books ORDER BY publicationdate DESC LIMIT 6";
 $resultProdukTerbaru = $db->query($queryProdukTerbaru);

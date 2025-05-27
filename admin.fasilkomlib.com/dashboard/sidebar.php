@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-include "../connection/conn.php";
+include_once "../connection/conn.php";
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
@@ -31,7 +31,7 @@ if (isset($_SESSION['username'])) {
 
 <?php
 $currentLocation = $_SERVER['REQUEST_URI'];
-// gambar
+// gambarr
 if (strpos($currentLocation, 'edit') !== false || strpos($currentLocation, 'orderstatus') !== false) {
     $ppurl = '../../image/profile/';
 } else if (strpos($currentLocation, 'dashboard') !== false) {
@@ -43,7 +43,6 @@ if (strpos($currentLocation, 'edit') !== false || strpos($currentLocation, 'orde
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

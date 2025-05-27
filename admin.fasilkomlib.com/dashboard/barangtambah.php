@@ -1,11 +1,12 @@
 <?php
-include '../connection/conn.php';
+include_once '../connection/conn.php';
 if (isset($_POST["submit"])) {
   $title = $_POST["title"];
   $author = $_POST["author"];
   $sinopsis = $_POST["sinopsis"];
   $isbn = $_POST["isbn"];
   $genre = $_POST["genre"];
+  $publisher = $data['publisher'] ?? 'FasilkomLab';
   $nop = $_POST["numberofpage"];
   $language = $_POST["language"];
   $postby = $_POST["postby"];
@@ -53,7 +54,7 @@ if (isset($_POST["submit"])) {
 
       move_uploaded_file($pdfTmp, 'listpdf/' . $pdfNewName);
 
-      $query = "INSERT INTO books (title, author, sinopsis, isbn, genre, numberofpage, language, cover, pdf_file, postby) VALUES('$title', '$author', '$sinopsis', '$isbn', '$genre', '$nop', '$language', '$newImageName', '$pdfNewName', '$postby')";
+      $query = "INSERT INTO books (title, author, sinopsis, isbn, genre, publisher, numberofpage, language, cover, pdf_file, postby) VALUES('$title', '$author', '$sinopsis', '$isbn', '$genre', '$publisher', '$nop', '$language', '$newImageName', '$pdfNewName', '$postby')";
       mysqli_query($db, $query);
       echo "<script>alert('Buku berhasil ditambahkan'); document.location.href = 'barang.php';</script>";
     }
