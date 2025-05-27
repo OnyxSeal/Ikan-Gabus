@@ -1,68 +1,21 @@
 <?php
 session_start();
-
-// if ($_SERVER['REQUEST_URI'] === '/seller-ratifad.com/index.php') {
-//     header('Location: /seller-ratifad.com/', true, 302);
-//     exit;
-// }
-
 include "connection/conn.php";
+require_once "Auth/AuthFactory.php";
 
-if (isset($_POST['masuk'])) {
-    $user = $_POST['usem'];
-    $pw = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = isset($_POST['masuk']) ? 'masuk' : (isset($_POST['daftar']) ? 'daftar' : null);
 
-    $sql = "SELECT * FROM admin WHERE (usradm='$user' OR email='$user') AND pwadm='$pw'";
-    $result = mysqli_query($db, $sql);
-
-    if (mysqli_num_rows($result) == 1) {
-
-        $_SESSION['username'] = $user;
-
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Login berhasil";
-
-        echo "<script>setTimeout(function(){ window.location.href = 'dashboard/dashboards.php'; }, 2000);</script>";
-    } else {
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Username atau email atau kata sandi salah. Silakan coba lagi.";
-
-        // Redirect kembali ke halaman login
-        header("Location: index.php");
-        exit();
-    }
-}
-?>
-
-<?php
-
-include "connection/conn.php";
-
-if (isset($_POST['daftar'])) {
-    // Ambil data dari form pendaftaran
-    $avatar = $_POST['avatar'];
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $nohp = $_POST['nohp'];
-
-    $check_user_query = "SELECT * FROM admin WHERE usradm='$username' OR email='$email'";
-    $check_user_result = mysqli_query($db, $check_user_query);
-
-    if (mysqli_num_rows($check_user_result) > 0) {
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Email tersebut sudah digunakan. Silakan coba dengan email lain.";
-    } else  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/@.*unsika\.ac\.id$/', $email)) {
-        // $error = "Please enter a valid email with unsika.ac.id domain.";
-        $_SESSION['alert_class'] = "alert-danger";
-        $_SESSION['alert_message'] = "Pastikan Anda memasukan Email Univeristas Singaperbangsa Karawang";
-    } else  {
-        $insert_user_query = "INSERT INTO admin (profile_picture, fullname, email, usradm, pwadm, nohpadm) VALUES ('$avatar', '$fullname', '$email', '$username', '$password', '$nohp')";
-        mysqli_query($db, $insert_user_query);
-        $_SESSION['alert_class'] = "alert-success";
-        $_SESSION['alert_message'] = "Pendaftaran berhasil. Silakan login dengan akun baru kamu.";
-        echo "<script>setTimeout(function(){ window.location.href = 'index.php'; }, 2000);</script>";
+    if ($action !== null) {
+        try {
+            $handler = AuthFactory::create($action);
+            $handler->handle($_POST);
+        } catch (Exception $e) {
+            $_SESSION['alert_class'] = "alert-danger";
+            $_SESSION['alert_message'] = "Terjadi kesalahan: " . $e->getMessage();
+            header("Location: index.php");
+            exit();
+        }
     }
 }
 ?>
