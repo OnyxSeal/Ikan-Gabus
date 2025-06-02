@@ -51,7 +51,7 @@ $offset = 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barang kali</title>
+    <title>Kelola Buku</title>
     <style>
         body {
             background-color: #EDEDED;
