@@ -368,7 +368,7 @@ if (!empty($filenameFromDB)) {
                                             </a>
                                         </div>
                                     <?php else: ?>
-                                        <div class="plusKeranjang">
+                                        <div class="plusBookMarks">
                                             <button onclick="window.location.href='sign.php'">+ Bookmark</button>
                                         </div>
                                         <div class="dld">
@@ -399,7 +399,7 @@ if (!empty($filenameFromDB)) {
 
         // Simulasi waktu download
         setTimeout(() => {
-        // Ganti isi tombol dengan animasi dotlottie + teks
+        // Bagian ini ganti isi tombol dengan animasi dotlottie + teks
         btn.innerHTML = `
             <dotlottie-wc 
             src="https://lottie.host/b8675cad-763a-43a7-bb61-87861ce3d543/S8ycXnGDdv.lottie"

@@ -134,10 +134,10 @@
           <h4>ikuti kami</h4>
           <div class="social-links">
             <a href="https://www.github.com/onyxseal">
-              <i class="fab fa-instagram"></i>
+              <i class="fab fa-github"></i>
             </a>
             <a href="https://www.instagram.com/vall.rar">
-              <i class="fab fa-github"></i>
+              <i class="fab fa-instagram"></i>
             </a>
           </div>
         </div>

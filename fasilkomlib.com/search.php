@@ -34,7 +34,6 @@ $result_produk = $db->query($query_produk);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasil Pencarian untuk "<?php echo $query; ?>"</title>
-    <link rel="icon" href="https://www.gigaval.com/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         body {
@@ -259,7 +258,7 @@ $result_produk = $db->query($query_produk);
                                     <div class="boxRBA">
                                         <a href="book.php?id=<?php echo $book['bookID']; ?>">
                                             <div class="coverRBA">
-                                                <img src="../seller.tukubuku.com/dashboard/listgambar/<?php echo $book['cover']; ?>"
+                                                <img src="../admin.fasilkomlib.com/dashboard/listgambar/<?php echo $book['cover']; ?>"
                                                     alt="<?php echo $book['title']; ?>">
                                                 <div class="descRBA">
                                                     <span id="titleRBA"><b><?php echo $book['title']; ?></b></span><br>
