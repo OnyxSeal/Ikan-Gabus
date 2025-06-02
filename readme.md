@@ -6,11 +6,13 @@
 
 ## 🔍 Fitur Utama
 
-- 🔐 Login & Register Admin
+- 🔐 Login & Register Admin  
 - 📖 Tambah, lihat, edit, dan hapus data buku  
 - 🧾 Riwayat penambahan buku & admin pencatat  
 - 📂 Kategori buku dan pencarian  
 - 📊 Dashboard sederhana untuk monitoring  
+- 📚 User dapat menambahkan buku ke bookmark  
+- 📥 User dapat mengunduh buku digital  
 
 ---
 
@@ -27,4 +29,4 @@
 
 1. Clone repositori:  
    ```bash
-   git clone https://github.com/OnyxSeal/FasilkomLib.git
+   git clone https://github.com/OnyxSeal/Ikan-Gabus.git
